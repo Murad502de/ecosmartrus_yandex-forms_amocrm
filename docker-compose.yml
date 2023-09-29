@@ -1,0 +1,60 @@
+version: '3.5'
+services:
+    nginx:
+        build: ./docker/images/nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./docker/images/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./application:/var/www/html
+            - ./logs:/var/log/nginx
+        restart: unless-stopped
+        networks:
+            - host
+        links:
+            - mw-yf-amo_app
+
+    mw-yf-amo_app:
+        build: ./docker/images/php
+        working_dir: /var/www/html
+        links:
+            - mw-yf-amo_db
+        networks:
+            - host
+        volumes:
+            - ./application:/var/www/html
+        restart: unless-stopped
+
+    mw-yf-amo_db:
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        networks:
+            - host
+        volumes:
+            - mw-yf-amo_mysql-db:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: mw-yf-amo_app-gateway
+            MYSQL_USER: test #root
+            MYSQL_ROOT_PASSWORD: root
+
+    # mw-yf-amo_supervisor:
+    #     build: ./docker/images/supervisor
+    #     working_dir: /var/www/html
+    #     depends_on:
+    #         - mw-yf-amo_db
+    #     links:
+    #         - mw-yf-amo_db
+    #     networks:
+    #         - host
+    #     volumes:
+    #         - ./application:/var/www/html
+    #         # - ./docker/images/supervisor/files:/etc/supervisor/conf.d/
+    #     restart: unless-stopped
+
+networks:
+    host:
+        driver: bridge
+
+volumes:
+    mw-yf-amo_mysql-db:
