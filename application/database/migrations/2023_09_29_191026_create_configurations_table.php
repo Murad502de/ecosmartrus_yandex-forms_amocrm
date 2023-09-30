@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->unsignedInteger('amocrm_communication_methods_id');
             $table->unsignedInteger('amocrm_social_links_id');
-            $table->unsignedInteger('amocrm_additional_Info_id');
+            $table->unsignedInteger('amocrm_additional_info_id');
             $table->unsignedInteger('amocrm_pregnancy_id');
             $table->unsignedInteger('amocrm_human_parameters_id');
             $table->unsignedInteger('amocrm_health_id');

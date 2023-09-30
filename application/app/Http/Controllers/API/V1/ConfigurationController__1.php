@@ -27,7 +27,7 @@ class ConfigurationController__1 extends Controller
             'amocrm_client_secret'             => '',
             'amocrm_communication_methods_id'  => 0,
             'amocrm_social_links_id'           => 0,
-            'amocrm_additional_Info_id'        => 0,
+            'amocrm_additional_info_id'        => 0,
             'amocrm_pregnancy_id'              => 0,
             'amocrm_human_parameters_id'       => 0,
             'amocrm_health_id'                 => 0,

@@ -17,7 +17,7 @@ class Configuration extends Model
         'amocrm_client_secret',
         'amocrm_communication_methods_id',
         'amocrm_social_links_id',
-        'amocrm_additional_Info_id',
+        'amocrm_additional_info_id',
         'amocrm_pregnancy_id',
         'amocrm_human_parameters_id',
         'amocrm_health_id',
