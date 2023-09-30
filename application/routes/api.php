@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\API\V1\ServicesAmoCrmController__1;
 use App\Http\Controllers\API\V1\ConfigurationController__1;
+use App\Http\Controllers\API\V1\ServicesAmoCrmController__1;
+use App\Http\Controllers\API\V1\ServicesYandexFormsController__1;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,12 @@ Route::prefix('v1')->group(function () {
             Route::prefix('auth')->group(function () {
                 Route::get('signin', [ServicesAmoCrmController__1::class, 'signin']);
                 Route::get('signout', [ServicesAmoCrmController__1::class, 'signout']);
+            });
+        });
+
+        Route::prefix('yandex')->group(function () {
+            Route::prefix('forms')->group(function () {
+                Route::post('submit', [ServicesYandexFormsController__1::class, 'submit']);
             });
         });
     });
