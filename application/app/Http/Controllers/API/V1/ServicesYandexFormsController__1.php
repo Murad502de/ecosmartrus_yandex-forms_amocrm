@@ -28,7 +28,6 @@ class ServicesYandexFormsController__1 extends Controller
 
         if (!$applicant->amo_id) {
             //TODO find contact in amo by email
-            dump($PARAMS['email']); //DELETE
             $amoContact = $AMO_API->findContactByQuery($PARAMS['email']);
             dump($amoContact); //DELETE
 

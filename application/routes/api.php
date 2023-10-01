@@ -21,7 +21,7 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('yandex')->group(function () {
             Route::prefix('forms')->group(function () {
-                Route::post('submit', [ServicesYandexFormsController__1::class, 'submit']);
+                Route::middleware(['services.amo.token'])->post('submit', [ServicesYandexFormsController__1::class, 'submit']);
             });
         });
     });
