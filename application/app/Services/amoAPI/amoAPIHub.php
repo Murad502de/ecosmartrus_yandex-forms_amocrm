@@ -21,9 +21,7 @@ class amoAPIHub
     public function __construct($amoData)
     {
         $this->client = new amoClient();
-
         $this->pageItemLimit = 250;
-
         $this->amoData['client_id']     = $amoData['client_id'] ?? null;
         $this->amoData['client_secret'] = $amoData['client_secret'] ?? null;
         $this->amoData['code']          = $amoData['code'] ?? null;
@@ -237,6 +235,31 @@ class amoAPIHub
         }
     }
 
+    public function findContactByQuery($query)
+    {
+        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/contacts?query=$query&limit=1";
+
+        try {
+            $response = $this->client->sendRequest([
+                'url'     => $url,
+                'headers' => [
+                    'Content-Type'  => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->amoData['access_token'],
+                ],
+                'method'  => 'GET',
+            ]);
+
+            if ($response['code'] < 200 || $response['code'] > 204) {
+                throw new \Exception($response['code']);
+            }
+
+            return $response;
+        } catch (\Exception$exception) {
+            Log::error(__METHOD__, ['message' => $exception->getMessage(),]);
+            return $response;
+        }
+    }
+
     public function createLead(array $data): ?int
     {
         try {
@@ -255,6 +278,31 @@ class amoAPIHub
             }
 
             return $lead['body']['_embedded']['leads'][0]['id'];
+        } catch (\Exception$exception) {
+            Log::error(__METHOD__, ['message' => $exception->getMessage()]);
+
+            return null;
+        }
+    }
+
+    public function createContact(array $data): ?int
+    {
+        try {
+            $lead = $this->client->sendRequest([
+                'url'     => "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/contacts",
+                'headers' => [
+                    'Content-Type'  => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->amoData['access_token'],
+                ],
+                'method'  => 'POST',
+                'data'    => [$data],
+            ]);
+
+            if ($lead['code'] !== 200) {
+                throw new \Exception($lead['code']);
+            }
+
+            return $lead['body']['_embedded']['contacts'][0]['id'];
         } catch (\Exception$exception) {
             Log::error(__METHOD__, ['message' => $exception->getMessage()]);
 

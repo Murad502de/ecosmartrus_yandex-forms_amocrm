@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
-            $table->unsignedInteger('amo_id')->index();
-            $table->string('name');
-            $table->string('email')->index();
-            $table->string('phone')->index();
+            $table->unsignedInteger('amo_id')->nullable()->index();
+            $table->string('name')->nullable();
+            $table->string('email')->nullable()->index();
+            $table->string('phone')->nullable()->index();
         });
     }
 
