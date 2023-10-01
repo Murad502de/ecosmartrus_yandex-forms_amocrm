@@ -41,6 +41,9 @@ class Configuration extends Model
         'amocrm_full_name_id',
         'amocrm_position_id',
         'amocrm_email_id',
+        'amocrm_default_resp_user_id',
+        'amocrm_form_sent_id',
+        'amocrm_form_completed_id',
     ];
     protected $hidden = [
         'id',

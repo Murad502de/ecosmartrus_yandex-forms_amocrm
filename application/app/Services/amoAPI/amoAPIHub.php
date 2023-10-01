@@ -202,7 +202,7 @@ class amoAPIHub
 
     public function findContactById($id)
     {
-        $url = "https://" . config('services.amoCRM.subdomain') . ".amocrm.ru/api/v4/contacts/$id?with=leads";
+        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/contacts/$id?with=leads";
 
         try {
             $response = $this->client->sendRequest(
@@ -237,7 +237,7 @@ class amoAPIHub
 
     public function findContactByQuery($query)
     {
-        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/contacts?query=$query&limit=1";
+        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/contacts?query=$query&limit=1&with=leads";
 
         try {
             $response = $this->client->sendRequest([
@@ -264,7 +264,7 @@ class amoAPIHub
     {
         try {
             $lead = $this->client->sendRequest([
-                'url'     => "https://" . config('services.amoCRM.subdomain') . ".amocrm.ru/api/v4/leads",
+                'url'     => "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/leads",
                 'headers' => [
                     'Content-Type'  => 'application/json',
                     'Authorization' => 'Bearer ' . $this->amoData['access_token'],
@@ -313,14 +313,13 @@ class amoAPIHub
     public function linkContactsToLead(int $leadId, array $contacts)
     {
         $response = $this->client->sendRequest([
-            'url'     => "https://" . config('services.amoCRM.subdomain') . ".amocrm.ru/api/v4/leads/$leadId/link",
+            'url'     => "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/leads/$leadId/link",
             'headers' => [
                 'Content-Type'  => 'application/json',
                 'Authorization' => 'Bearer ' . $this->amoData['access_token'],
             ],
             'method'  => 'POST',
             'data'    => $contacts,
-
         ]);
 
         if ($response['code'] !== 200) {
@@ -591,7 +590,7 @@ class amoAPIHub
 
     public function updateLead($data)
     {
-        $url = "https://" . config('services.amoCRM.subdomain') . ".amocrm.ru/api/v4/leads";
+        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/leads";
 
         try {
             $response = $this->client->sendRequest(
@@ -620,6 +619,34 @@ class amoAPIHub
                 ]
             );
 
+            return $response;
+        }
+    }
+
+    public function updateContact($data)
+    {
+        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/contacts";
+
+        try {
+            $response = $this->client->sendRequest(
+                [
+                    'url'     => $url,
+                    'headers' => [
+                        'Content-Type'  => 'application/json',
+                        'Authorization' => 'Bearer ' . $this->amoData['access_token'],
+                    ],
+                    'method'  => 'PATCH',
+                    'data'    => $data,
+                ]
+            );
+
+            if ($response['code'] < 200 || $response['code'] > 204) {
+                throw new \Exception($response['code']);
+            }
+
+            return $response;
+        } catch (\Exception$exception) {
+            Log::error(__METHOD__, ['message' => $exception->getMessage(),]);
             return $response;
         }
     }
